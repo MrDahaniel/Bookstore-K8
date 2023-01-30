@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: reviews-frontend-deployment
+    labels:
+        app: reviews-frontend
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: reviews-frontend
+    template:
+        metadata:
+            labels:
+                app: reviews-frontend
+        spec:
+            containers:
+                - name: reviews-frontend
+                  image: chaphe/frontend-reviews-image:1.0
+                  env:
+                      - name: REVIEWS_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                name: frontend-config
+                                key: reviews_url
+                  ports:
+                      - containerPort: 80
