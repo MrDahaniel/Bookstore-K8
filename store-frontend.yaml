@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: store-frontend-deployment
+    labels:
+        app: store-frontend
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: store-frontend
+    template:
+        metadata:
+            labels:
+                app: store-frontend
+        spec:
+            containers:
+                - name: store-frontend
+                  image: chaphe/frontend-store-image:1.0
+                  ports:
+                      - containerPort: 80
+                  env:
+                      - name: REVIEWS_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                name: reviews-frontend-config
+                                key: reviews_url
+                      - name: CATALOG_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                name: reviews-frontend-config
+                                key: catalog_url
+                      - name: STORE_URL
+                        valueFrom:
+                            configMapKeyRef:
+                                name: reviews-frontend-config
+                                key: store_url
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: store-frontend-service
+spec:
+    type: NodePort
+    selector:
+        app: store-frontend
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 80
+          nodePort: 30401

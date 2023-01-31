@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: store-backend-deployment
+    labels:
+        app: store-backend
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: store-backend
+    template:
+        metadata:
+            labels:
+                app: store-backend
+        spec:
+            containers:
+                - name: store-backend
+                  image: chaphe/backend-store-image:1.0
+                  ports:
+                      - containerPort: 8082
+                  env:
+                      - name: MYSQL_DB_HOST
+                        valueFrom:
+                            configMapKeyRef:
+                                name: store-backend-config
+                                key: mysql_db_host
+                      - name: MYSQL_DB_PORT
+                        valueFrom:
+                            configMapKeyRef:
+                                name: store-backend-config
+                                key: mysql_db_port
+                      - name: MYSQL_DB_USERNAME
+                        valueFrom:
+                            configMapKeyRef:
+                                name: store-backend-config
+                                key: mysql_db_username
+                      - name: MYSQL_DB_PASSWORD
+                        valueFrom:
+                            configMapKeyRef:
+                                name: store-backend-config
+                                key: mysql_db_password
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: store-backend-service
+spec:
+    type: NodePort
+    selector:
+        app: store-backend
+    ports:
+        - protocol: TCP
+          port: 8082
+          targetPort: 8082
+          nodePort: 30400

@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: catalog-backend-config
+data:
+    mysql_db_host: mysql-catalog-service
+    mysql_db_port: "3306"
+    mysql_db_username: root
+    mysql_db_password: password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: store-backend-config
+data:
+    mysql_db_host: mysql-store-service
+    mysql_db_port: "3306"
+    mysql_db_username: root
+    mysql_db_password: password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: catalog-database-config
+data:
+    mysql_database: catalog-library
+    mysql_root_password: password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: store-database-config
+data:
+    mysql_database: store-library
+    mysql_root_password: password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: reviews-backend-config
+data:
+    mongodb_host: mongo-reviews-service
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: reviews-frontend-config
+data:
+    reviews_url: http://172.30.85.249:30200
+    catalog_url: http://172.30.85.249:30300
+    store_url: http://172.30.85.249:30400
